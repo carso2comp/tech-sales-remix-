@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Still a People Business</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one long scrolling career profile, sticky section nav, alternating full-width bands, an interactive sorter at the center */
+:root {
+  --bg: #F3F5F8;
+  --surface: #FFFFFF;
+  --ink: #0F1C2E;
+  --muted: #4A5A70;
+  --line: #D5DCE6;
+  --accent: #9A5B00;
+  --accent-fill: #F5A524;
+  --tech: #2457C5;
+  --tech-soft: #E6EEFB;
+  --people-soft: #FDF1DC;
+  --good: #1E7A4C;
+  --bad: #B3261E;
+  --display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --body: 'Inter', system-ui, -apple-system, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1A2B; --surface: #16263D; --ink: #F2EFE8; --muted: #A9B4C2; --line: #2A3B52;
+    --accent: #F5A524; --accent-fill: #F5A524; --tech: #8DB8FF; --tech-soft: #18304F; --people-soft: #2C2516;
+    --good: #5FD3A6; --bad: #FF8A80; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1A2B; --surface: #16263D; --ink: #F2EFE8; --muted: #A9B4C2; --line: #2A3B52;
+  --accent: #F5A524; --accent-fill: #F5A524; --tech: #8DB8FF; --tech-soft: #18304F; --people-soft: #2C2516;
+  --good: #5FD3A6; --bad: #FF8A80; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.6; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.08; }
+h2 { font-size: clamp(30px, 4vw, 44px); letter-spacing: -0.01em; }
+h3 { font-size: 22px; }
+p { margin: 0; }
+.eyebrow { font-family: var(--mono); font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.lede { font-size: 19px; color: var(--muted); max-width: 62ch; }
+a { color: var(--accent); }
+:focus-visible { outline: 3px solid var(--accent-fill); outline-offset: 3px; border-radius: 4px; }
+
+/* Nav */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
+.brand { font-family: var(--display); font-weight: 700; font-size: 18px; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.brand span { color: var(--accent); }
+.nav ul { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; overflow-x: auto; }
+.nav a.link { color: var(--muted); text-decoration: none; font-size: 15px; font-weight: 500; white-space: nowrap; }
+.nav a.link:hover { color: var(--ink); }
+@media (max-width: 760px) { .nav ul { display: none; } }
+
+section { padding-block: 88px; }
+.band { background: var(--surface); border-block: 1px solid var(--line); }
+.stack { display: flex; flex-direction: column; gap: 20px; }
+
+/* Hero */
+.hero { padding-block: 72px 88px; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 48px; align-items: end; }
+.hero h1 { font-size: clamp(44px, 7vw, 88px); letter-spacing: -0.025em; line-height: 0.98; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.statcard { background: var(--tech-soft); border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 10px; }
+.statcard .big { font-family: var(--display); font-weight: 700; font-size: 96px; line-height: 1; color: var(--tech); font-variant-numeric: tabular-nums; }
+.statcard .src { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+@media (max-width: 820px) { .hero-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* Meet */
+.meet { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+.pull { font-family: var(--display); font-size: clamp(28px, 3.4vw, 40px); line-height: 1.2; font-weight: 500; border-left: 0; }
+.pull .who { display: block; margin-top: 14px; font-family: var(--mono); font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+@media (max-width: 820px) { .meet { grid-template-columns: minmax(0, 1fr); } }
+
+/* Timeline */
+.tl { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 36px; position: relative; }
+.tl::before { content: ""; position: absolute; left: 22px; right: 22px; top: 22px; height: 3px; background: var(--line); }
+.stop { position: relative; background: none; border: 0; padding: 0; text-align: left; cursor: pointer; color: var(--ink); font: inherit; display: flex; flex-direction: column; gap: 12px; min-height: 44px; }
+.dot { width: 44px; height: 44px; border-radius: 50%; background: var(--bg); border: 3px solid var(--line); display: grid; place-items: center; font-family: var(--mono); font-size: 14px; color: var(--muted); transition: background .2s, border-color .2s; }
+.stop .label { font-family: var(--display); font-weight: 700; font-size: 19px; }
+.stop .year { font-size: 14px; color: var(--muted); }
+.stop[aria-selected="true"] .dot { background: var(--accent-fill); border-color: var(--accent-fill); color: #0F1C2E; }
+.stop:hover .dot { border-color: var(--accent-fill); }
+.tl-panel { margin-top: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 28px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 28px; min-height: 160px; }
+.band .tl-panel { background: var(--bg); }
+.tl-panel h3 { margin-bottom: 8px; }
+.tl-panel blockquote { margin: 0; font-family: var(--display); font-size: 22px; line-height: 1.35; font-weight: 500; color: var(--ink); }
+@media (max-width: 760px) {
+  .tl { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .tl::before { left: 21px; right: auto; top: 22px; bottom: 22px; width: 3px; height: auto; }
+  .stop { flex-direction: row; align-items: center; gap: 16px; padding-block: 6px; }
+  .tl-panel { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Day stats */
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; margin-top: 36px; }
+.stat { border-top: 3px solid var(--accent-fill); padding-top: 18px; display: flex; flex-direction: column; gap: 8px; }
+.stat .num { font-family: var(--display); font-weight: 700; font-size: 52px; line-height: 1; }
+.stat p { color: var(--muted); }
+@media (max-width: 760px) { .stats { grid-template-columns: minmax(0, 1fr); } }
+
+/* Sorter */
+.sorter-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; }
+.score { font-family: var(--mono); font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.score strong { color: var(--ink); font-size: 22px; }
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 32px; }
+.card { background: var(--bg); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px; transition: background .2s, border-color .2s; }
+.card .task { font-weight: 600; font-size: 18px; }
+.card .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.card button { min-height: 44px; padding: 0 18px; border-radius: 999px; font: 600 15px var(--body); cursor: pointer; border: 2px solid var(--line); background: var(--surface); color: var(--ink); display: inline-flex; align-items: center; gap: 8px; }
+.card button.b-tech:hover { border-color: var(--tech); }
+.card button.b-person:hover { border-color: var(--accent-fill); }
+.card button:disabled { cursor: default; opacity: .55; }
+.card .fb { font-size: 15px; color: var(--muted); }
+.card .fb b { font-weight: 600; }
+.card.is-tech { background: var(--tech-soft); border-color: var(--tech); }
+.card.is-person { background: var(--people-soft); border-color: var(--accent-fill); }
+.card .verdict.ok { color: var(--good); }
+.card .verdict.no { color: var(--bad); }
+.reset { margin-top: 24px; min-height: 44px; padding: 0 20px; border-radius: 999px; border: 2px solid var(--line); background: none; color: var(--ink); font: 600 15px var(--body); cursor: pointer; }
+.reset:hover { border-color: var(--ink); }
+.takeaway { margin-top: 24px; padding: 22px 24px; border-radius: 16px; background: var(--ink); color: var(--bg); font-family: var(--display); font-size: 20px; line-height: 1.4; }
+@media (max-width: 760px) { .cards { grid-template-columns: minmax(0, 1fr); } }
+
+/* Toolkit */
+.toolkit { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+.chips { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+.chip { padding: 10px 18px; border-radius: 999px; border: 2px solid var(--line); font-weight: 500; }
+.chip.key { border-color: var(--accent-fill); color: var(--accent); font-weight: 600; }
+.hard { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 12px; }
+.hard p.q { font-family: var(--display); font-size: 22px; line-height: 1.35; font-weight: 500; }
+@media (max-width: 820px) { .toolkit { grid-template-columns: minmax(0, 1fr); } }
+
+/* Bottom line */
+.closer { background: var(--ink); color: var(--bg); }
+.closer h2 { font-size: clamp(32px, 5vw, 60px); max-width: 18ch; }
+.closer h2 span { color: var(--accent-fill); }
+.closer p { color: color-mix(in srgb, var(--bg) 78%, var(--ink)); max-width: 62ch; font-size: 18px; }
+
+/* Works cited */
+.cited ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; max-width: 75ch; }
+.cited li { padding-left: 2.5em; text-indent: -2.5em; overflow-wrap: anywhere; }
+footer { padding-block: 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Sections">
+  <div class="wrap">
+    <a class="brand" href="#top">Still a <span>People</span> Business</a>
+    <ul>
+      <li><a class="link" href="#meet">Meet Casey</a></li>
+      <li><a class="link" href="#path">The path</a></li>
+      <li><a class="link" href="#day">The day</a></li>
+      <li><a class="link" href="#sort">Tech or person?</a></li>
+      <li><a class="link" href="#toolkit">Break in</a></li>
+      <li><a class="link" href="#sources">Sources</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="stack">
+        <div class="eyebrow">A career profile for students eyeing tech</div>
+        <h1>AI can prep the meeting. <em>You still have to run it.</em></h1>
+        <p class="lede">Technology keeps changing how tech sales gets done. One salesperson’s career shows what changes, what stays the same, and what it takes to break in.</p>
+      </div>
+      <aside class="statcard" aria-label="Key statistic">
+        <div class="eyebrow" style="color: var(--tech)">What the machines took over</div>
+        <div class="big">10%+</div>
+        <p>of one company’s sales-team time was freed up when AI handled meeting prep: ranking leads, gathering research and writing notes.</p>
+        <div class="src">McKinsey &amp; Company (Dierks et al.)</div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- MEET -->
+  <section id="meet" class="band">
+    <div class="wrap meet">
+      <div class="stack">
+        <div class="eyebrow">Meet the salesperson</div>
+        <h2>Casey Compton sells solutions, not just products</h2>
+        <p>Casey works with business customers to find the technology that solves their problems. I interviewed him (he’s my dad) about how his job works and how fast-moving technology, especially AI, is changing it.</p>
+        <p>His answer surprised me. New tools make some tasks easier, but the heart of the job is still listening to people and solving their problems. The job takes two skill sets at once: deep technical knowledge and real people skills.</p>
+      </div>
+      <p class="pull">“No two days are ever the same.”<span class="who">Casey Compton, on why he likes the job</span></p>
+    </div>
+  </section>
+
+  <!-- PATH -->
+  <section id="path">
+    <div class="wrap">
+      <div class="stack">
+        <div class="eyebrow">Career path · tap a stop</div>
+        <h2>The path in wasn’t a straight line</h2>
+        <p class="lede">Casey never planned on sales. His route shows how a career can change direction until the work fits.</p>
+      </div>
+      <div class="tl" role="tablist" aria-label="Career stops">
+        <button class="stop" role="tab" id="t0" aria-selected="true" aria-controls="tlpanel" data-i="0"><span class="dot">1</span><span><span class="label">Customer side</span></span></button>
+        <button class="stop" role="tab" id="t1" aria-selected="false" aria-controls="tlpanel" data-i="1"><span class="dot">2</span><span><span class="label">Management</span></span></button>
+        <button class="stop" role="tab" id="t2" aria-selected="false" aria-controls="tlpanel" data-i="2"><span class="dot">3</span><span><span class="label">First sales role</span></span></button>
+        <button class="stop" role="tab" id="t3" aria-selected="false" aria-controls="tlpanel" data-i="3"><span class="dot">4</span><span><span class="label">Regional firm</span></span></button>
+      </div>
+      <div class="tl-panel" id="tlpanel" role="tabpanel" aria-labelledby="t0" aria-live="polite">
+        <div><h3 id="tl-h">On the customer side</h3><p id="tl-p">Casey spent most of his early career as a technology user, not a seller.</p></div>
+        <blockquote id="tl-q">He learned how technology works from the perspective of the people who rely on it every day.</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAY -->
+  <section id="day" class="band">
+    <div class="wrap">
+      <div class="stack">
+        <div class="eyebrow">A week on the job</div>
+        <h2>Most of the job is communication</h2>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="num">Hundreds</div><p>of Outlook emails sent every week. It’s the part of the job people least expect.</p></div>
+        <div class="stat"><div class="num">3 ways</div><p>to reach customers and coworkers each day: phone calls, virtual meetings and in-person meetings.</p></div>
+        <div class="stat"><div class="num">0</div><p>shared standards. Every client company communicates its own way. If Casey could change one thing, he’d make it uniform.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SORTER -->
+  <section id="sort">
+    <div class="wrap">
+      <div class="sorter-head">
+        <div class="stack">
+          <div class="eyebrow">Try it yourself</div>
+          <h2>Tech or person?</h2>
+          <p class="lede">Sort each sales task. Does technology handle it, or does it still take a person? Pick an answer to see what the research and the interview say.</p>
+        </div>
+        <div class="score" aria-live="polite"><strong id="score">0</strong> / 8 correct · <span id="done">0</span> sorted</div>
+      </div>
+      <div class="cards" id="cards"></div>
+      <div class="takeaway" id="takeaway" hidden>AI can take over research, rankings and notes. Explaining, listening, building trust and fixing problems still take a person.</div>
+      <button class="reset" id="reset" type="button">Start over</button>
+    </div>
+  </section>
+
+  <!-- TOOLKIT -->
+  <section id="toolkit" class="band">
+    <div class="wrap toolkit">
+      <div class="stack">
+        <div class="eyebrow">Want in?</div>
+        <h2>What to bring to a tech sales job</h2>
+        <p>Casey says employers look for more than a persuasive personality. Salespeople have to understand what they sell and explain how it meets a customer’s needs.</p>
+        <div class="chips">
+          <span class="chip">Strong tech background</span>
+          <span class="chip">Experience in the field</span>
+          <span class="chip">Basic math</span>
+          <span class="chip">Microsoft Office</span>
+          <span class="chip key">A habit of learning</span>
+        </div>
+      </div>
+      <div class="hard">
+        <div class="eyebrow">The hardest part</div>
+        <p class="q">You have to “constantly keep up and stay informed about new developments.”</p>
+        <p style="color: var(--muted)">Security, how customers plan to use new tools, and now AI all keep changing. Learning the product once isn’t enough.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSER -->
+  <section class="closer">
+    <div class="wrap stack">
+      <div class="eyebrow" style="color: inherit; opacity: .75">The bottom line</div>
+      <h2>Technology changes how the job gets done. <span>Understanding people is still the job.</span></h2>
+      <p>Even Casey’s trips to NBA, MLB and NFL games with customers are about relationships, and he admits even that gets old. Tools will keep getting faster. Flexibility, constant learning and working well with people are what make someone good at this career.</p>
+    </div>
+  </section>
+
+  <!-- WORKS CITED -->
+  <section id="sources" class="cited">
+    <div class="wrap stack">
+      <div class="eyebrow">Sources</div>
+      <h2>Works Cited</h2>
+      <ol>
+        <li>Compton, Casey. Personal interview. 6 Oct. 2026.</li>
+        <li>Dierks, Alexander, et al. “Unlocking Profitable B2B Growth through Gen AI.” <i>McKinsey &amp; Company</i>, 27 Mar. 2025, <a href="https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/unlocking-profitable-b2b-growth-through-gen-ai">www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/unlocking-profitable-b2b-growth-through-gen-ai</a>.</li>
+        <li>U.S. Bureau of Labor Statistics. “Sales Engineers.” <i>Occupational Outlook Handbook</i>, <a href="https://www.bls.gov/ooh/sales/sales-engineers.htm">www.bls.gov/ooh/sales/sales-engineers.htm</a>. Accessed 12 Oct. 2026.</li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Created by Carson Compton · ENGL 1500 Multimodal Remix</span>
+    <span>Remixed from the profile “How the Advancement of Technology Has Changed Tech Sales”</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Timeline
+  var stops = [
+    { h: 'On the customer side', p: 'Casey spent most of his early career as a technology user, not a seller.', q: 'He learned how technology works from the perspective of the people who rely on it every day.' },
+    { h: 'Moving into management', p: 'A promotion should have been the next step up. Instead, it pushed him to look for something new.', q: '“After moving into a management position, I began to lose interest.”' },
+    { h: 'A first try at sales', p: 'He took the chance to work in sales for a global company, a role that was brand new to him.', q: 'His years as a customer gave him a head start: he knew what buyers actually need.' },
+    { h: 'Finding the right fit', p: 'He moved to a smaller regional company. Instead of one product line, he can offer customers a range of products that fit their needs.', q: '“I enjoy the flexibility that comes with working for a smaller company.”' }
+  ];
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.stop'));
+  var panel = document.getElementById('tlpanel');
+  function show(i) {
+    tabs.forEach(function (t, j) { t.setAttribute('aria-selected', j === i ? 'true' : 'false'); t.tabIndex = j === i ? 0 : -1; });
+    document.getElementById('tl-h').textContent = stops[i].h;
+    document.getElementById('tl-p').textContent = stops[i].p;
+    document.getElementById('tl-q').textContent = stops[i].q;
+    panel.setAttribute('aria-labelledby', 't' + i);
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { show(i); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); var n = (i + 1) % tabs.length; show(n); tabs[n].focus(); }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); var p = (i + tabs.length - 1) % tabs.length; show(p); tabs[p].focus(); }
+    });
+  });
+  show(0);
+
+  // Sorter
+  var tasks = [
+    { t: 'Researching a customer before a meeting', a: 'tech', why: 'AI can gather research materials so salespeople walk in prepared (McKinsey).' },
+    { t: 'Explaining how a product solves a customer’s problem', a: 'person', why: 'Salespeople must understand the technical products they sell to meet customer needs (BLS).' },
+    { t: 'Ranking which sales leads look most promising', a: 'tech', why: 'One company used AI to prioritize sales opportunities (McKinsey).' },
+    { t: 'Learning how a customer plans to use tech in the future', a: 'person', why: 'Casey has to understand how each customer uses technology now and later (interview).' },
+    { t: 'Writing up meeting notes', a: 'tech', why: 'AI-generated meeting notes helped free up more than 10% of a sales team’s time (McKinsey).' },
+    { t: 'Building trust with a long-time client', a: 'person', why: 'Casey builds relationships in person, even at NBA, MLB and NFL games (interview).' },
+    { t: 'Speeding up market research', a: 'tech', why: 'The Bureau of Labor Statistics notes AI may make tasks like market research more efficient.' },
+    { t: 'Fixing it when something goes wrong for a customer', a: 'person', why: 'Resolving customer problems is part of the job, and sometimes the frustrating part (interview).' }
+  ];
+  var state = tasks.map(function () { return null; });
+  var cardsEl = document.getElementById('cards');
+  function render() {
+    cardsEl.innerHTML = '';
+    var score = 0, done = 0;
+    tasks.forEach(function (task, i) {
+      var pick = state[i];
+      var card = document.createElement('div');
+      card.className = 'card' + (pick ? (task.a === 'tech' ? ' is-tech' : ' is-person') : '');
+      var title = document.createElement('div'); title.className = 'task'; title.textContent = task.t; card.appendChild(title);
+      if (!pick) {
+        var btns = document.createElement('div'); btns.className = 'btns';
+        [['tech', 'Technology handles it', 'b-tech'], ['person', 'Takes a person', 'b-person']].forEach(function (o) {
+          var b = document.createElement('button'); b.type = 'button'; b.className = o[2]; b.id = 'pick-' + i + '-' + o[0]; b.textContent = o[1];
+          b.addEventListener('click', function () { state[i] = o[0]; render(); var next = document.querySelector('.card .btns button'); });
+          btns.appendChild(b);
+        });
+        card.appendChild(btns);
+      } else {
+        done++;
+        var ok = pick === task.a; if (ok) score++;
+        var fb = document.createElement('p'); fb.className = 'fb';
+        var v = document.createElement('b'); v.className = 'verdict ' + (ok ? 'ok' : 'no');
+        v.textContent = (ok ? 'Right. ' : 'Not quite. ') + (task.a === 'tech' ? 'Technology handles it. ' : 'It takes a person. ');
+        fb.appendChild(v); fb.appendChild(document.createTextNode(task.why));
+        card.appendChild(fb);
+      }
+      cardsEl.appendChild(card);
+    });
+    document.getElementById('score').textContent = score;
+    document.getElementById('done').textContent = done;
+    document.getElementById('takeaway').hidden = done < tasks.length;
+  }
+  document.getElementById('reset').addEventListener('click', function () { state = tasks.map(function () { return null; }); render(); });
+  render();
+})();
+</script>
+</body>
+</html>
